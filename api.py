@@ -25,7 +25,8 @@ def create_ticket(ticket_in: TicketCreate):
         "seat_number": ticket_in.seat_number,
         "movie_name": ticket_in.movie_name,
         "is_vip": ticket_in.is_vip,
-        "price": price
+        "price": price,
+        "status": ticket_in.status
     }
     tickets.append(new_ticket)
     current_ticket_id += 1
@@ -35,3 +36,27 @@ def create_ticket(ticket_in: TicketCreate):
 @api_router.get("/", response_model=list[TicketGet])
 def get_ticket():
     return tickets
+
+@api_router.get("/tickets/{seat_number}", response_model=TicketGet)
+def find_seat_number(seat_number: int):
+    for ticket in tickets:
+        if ticket["seat_number"] == seat_number:
+            return ticket
+    raise HTTPException(status_code=404,detail="Bunday chipta topilmadi")
+
+@api_router.get("/tickets/{movie_name}", response_model=TicketGet)
+def find_movie_name(movie_name: str):
+    for ticket in tickets:
+        if ticket["movie_name"] == movie_name:
+            return ticket
+    raise HTTPException(status_code=404, detail="Bunday kino topilmadi")
+
+@api_router.delete("/")
+def delete_ticket(ticket: TicketCreate):
+    for del_ticket in tickets:
+        if (del_ticket["seat_number"] == ticket.seat_number and 
+            del_ticket["movie_name"] == ticket.movie_name):
+            tickets.remove(del_ticket)
+            return "message:" f"{del_ticket} o'chirildi"
+
+    raise HTTPException(status_code=404, detail="Ushbu chipta topilmadi")

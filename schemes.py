@@ -5,6 +5,7 @@ class TicketCreate(BaseModel):
     seat_number: int = Field(ge=1, le=50)
     customer_name: str = Field(max_length=100, description="The name of the customer")
     is_vip: bool = False
+    status: str = Field(description=f"Bu chipta {customer_name} tomonidan band qilingan")
 
 
 class TicketOut(BaseModel):
@@ -14,6 +15,7 @@ class TicketOut(BaseModel):
     customer_name: str = Field(max_length=100)
     is_vip: bool = False
     price: float = Field(default=0)
+    status: str = Field()
 
 
 class TicketGet(BaseModel):
@@ -23,3 +25,4 @@ class TicketGet(BaseModel):
     customer_name: str = Field()
     is_vip: bool = Field()
     price: float = Field()
+    status: str = Field()
