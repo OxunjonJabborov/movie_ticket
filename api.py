@@ -35,26 +35,26 @@ def get_tickets(db = Depends(get_db)):
     tickets = db.scalars(stmt).all()
     return tickets
 
-# @api_router.get("/tickets/{seat_number}", response_model=TicketGet)
-# def find_seat_number(seat_number: int):
-#     for ticket in tickets:
-#         if ticket["seat_number"] == seat_number:
-#             return ticket
-#     raise HTTPException(status_code=404,detail="Bunday chipta topilmadi")
+@api_router.get("/tickets/{seat_number}", response_model=list[TicketGet])
+def find_seat_number(seat_number: int, db = Depends(get_db)):
+    stmt = select(Ticket).where(Ticket.seat_number == seat_number)
+    tickets = db.scalars(stmt).all()
+    if not tickets:
+        raise HTTPException(status_code=404, detail="Bunday chipta topilmadi")
+    return tickets
 
-# @api_router.get("/tickets/{movie_name}", response_model=TicketGet)
-# def find_movie_name(movie_name: str):
-#     for ticket in tickets:
-#         if ticket["movie_name"] == movie_name:
-#             return ticket
-#     raise HTTPException(status_code=404, detail="Bunday kino topilmadi")
+@api_router.get("/tickets/{movie_name}", response_model=list[TicketGet])
+def find_movie_name(movie_name: str, db = Depends(get_db)):
+    stmt = select(Ticket).where(Ticket.movie_name == movie_name)
+    tickets = db.scalars(stmt).all()
+    if not tickets:
+        raise HTTPException(status_code=404, detail="Bunday kino topilmadi")
+    return tickets
 
-# @api_router.delete("/")
-# def delete_ticket(ticket: TicketCreate):
-#     for del_ticket in tickets:
-#         if (del_ticket["seat_number"] == ticket.seat_number and 
-#             del_ticket["movie_name"] == ticket.movie_name):
-#             tickets.remove(del_ticket)
-#             return "message:" f"{del_ticket} o'chirildi"
+@api_router.delete("/")
+def delete_ticket(ticket: TicketCreate, db = Depends(get_db)):
+    stmt = select(Ticket).where(Ticket.movie_name == ticket.movie_name,
+                                Ticket.seat_number == ticket.seat_number)
+    del_ticket = db.scalar(stmt)
 
-#     raise HTTPException(status_code=404, detail="Ushbu chipta topilmadi")
+    raise HTTPException(status_code=404, detail="Ushbu chipta topilmadi")
