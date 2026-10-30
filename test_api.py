@@ -88,9 +88,15 @@ def test_find_by_movie_name_not_found(client):
     assert response.json() == {"detail": "Bunday kino topilmadi"}
 
 
-def test_delete_ticket_never_deletes(client):
+def test_delete_ticket(client):
     client.post("/api/tickets/", json=TICKET)
+    response = client.request("DELETE", "/api/tickets/",
+                              json={"movie_name": "Avatar", "seat_number": 5})
+    assert response.status_code == 204
+    assert client.get("/api/tickets/").json() == []
+
+
+def test_delete_ticket_not_found(client):
     response = client.request("DELETE", "/api/tickets/", json=TICKET)
     assert response.status_code == 404
     assert response.json() == {"detail": "Ushbu chipta topilmadi"}
-    assert len(client.get("/api/tickets/").json()) == 1

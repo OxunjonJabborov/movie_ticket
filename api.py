@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from schemas import TicketCreate, TicketOut
+from schemas import TicketCreate, TicketDelete, TicketOut
 from database import get_db
 from models import Ticket
 
@@ -61,8 +61,11 @@ def get_tickets_by_movie(movie_name: str, db: Session = Depends(get_db)):
                                "Bunday kino topilmadi")
 
 
-@api_router.delete("/")
-def delete_ticket(ticket: TicketCreate, db: Session = Depends(get_db)):
-    find_ticket(db, ticket.movie_name, ticket.seat_number)
+@api_router.delete("/", status_code=204)
+def delete_ticket(ticket_in: TicketDelete, db: Session = Depends(get_db)):
+    ticket = find_ticket(db, ticket_in.movie_name, ticket_in.seat_number)
+    if not ticket:
+        raise HTTPException(status_code=404, detail="Ushbu chipta topilmadi")
 
-    raise HTTPException(status_code=404, detail="Ushbu chipta topilmadi")
+    db.delete(ticket)
+    db.commit()

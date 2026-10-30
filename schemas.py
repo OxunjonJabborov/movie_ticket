@@ -13,6 +13,11 @@ class TicketCreate(TicketBase):
     pass
 
 
+class TicketDelete(BaseModel):
+    movie_name: str
+    seat_number: int
+
+
 class TicketOut(TicketBase):
     id: int
     price: float
