@@ -75,10 +75,17 @@ def test_find_by_seat_number_not_found(client):
     assert response.json() == {"detail": "Bunday chipta topilmadi"}
 
 
-def test_find_by_movie_name_is_unreachable(client):
+def test_find_by_movie_name(client):
     client.post("/api/tickets/", json=TICKET)
-    response = client.get("/api/tickets/tickets/Avatar")
-    assert response.status_code == 422
+    response = client.get("/api/tickets/movie/Avatar")
+    assert response.status_code == 200
+    assert response.json()[0]["seat_number"] == 5
+
+
+def test_find_by_movie_name_not_found(client):
+    response = client.get("/api/tickets/movie/Titanic")
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Bunday kino topilmadi"}
 
 
 def test_delete_ticket_never_deletes(client):

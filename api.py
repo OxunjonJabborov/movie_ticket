@@ -50,13 +50,13 @@ def get_tickets(db: Session = Depends(get_db)):
 
 
 @api_router.get("/tickets/{seat_number}", response_model=list[TicketOut])
-def find_seat_number(seat_number: int, db: Session = Depends(get_db)):
+def get_tickets_by_seat(seat_number: int, db: Session = Depends(get_db)):
     return find_tickets_or_404(db, Ticket.seat_number == seat_number,
                                "Bunday chipta topilmadi")
 
 
-@api_router.get("/tickets/{movie_name}", response_model=list[TicketOut])
-def find_movie_name(movie_name: str, db: Session = Depends(get_db)):
+@api_router.get("/movie/{movie_name}", response_model=list[TicketOut])
+def get_tickets_by_movie(movie_name: str, db: Session = Depends(get_db)):
     return find_tickets_or_404(db, Ticket.movie_name == movie_name,
                                "Bunday kino topilmadi")
 
