@@ -1,8 +1,6 @@
 from sqlalchemy import String, Integer, Boolean, Float
 from sqlalchemy.orm import Mapped, mapped_column
-from database import Base, engine
-
-Base.metadata.create_all(bind=engine)
+from database import Base
 
 
 class Ticket(Base):

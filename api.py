@@ -3,11 +3,8 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from schemas import TicketCreate, TicketOut
-from database import Base, get_db, engine
+from database import get_db
 from models import Ticket
-
-
-Base.metadata.create_all(bind=engine)
 
 api_router = APIRouter(prefix="/api/tickets")
 
