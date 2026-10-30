@@ -6,7 +6,7 @@ class TicketCreate(BaseModel):
     seat_number: int = Field(ge=1, le=50)
     customer_name: str = Field(max_length=100, description="The name of the customer")
     is_vip: bool = False
-    status: str = Field(description=f"Bu chipta {customer_name} tomonidan band qilingan")
+    status: str = Field(description="Chipta holati, masalan: band")
 
 
 class TicketOut(BaseModel):
