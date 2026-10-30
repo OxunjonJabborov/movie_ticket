@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 
-class TicketCreate(BaseModel):
+class TicketBase(BaseModel):
     movie_name: str = Field(max_length=200, description="The name of the movie")
     seat_number: int = Field(ge=1, le=50)
     customer_name: str = Field(max_length=100, description="The name of the customer")
@@ -9,21 +9,10 @@ class TicketCreate(BaseModel):
     status: str = Field(description="Chipta holati, masalan: band")
 
 
-class TicketOut(BaseModel):
-    id: int = Field(ge=1)
-    movie_name: str = Field(max_length=200)
-    seat_number: int = Field(ge=1, le=50)
-    customer_name: str = Field(max_length=100)
-    is_vip: bool = False
-    price: float = Field(default=0)
-    status: str = Field()
+class TicketCreate(TicketBase):
+    pass
 
 
-class TicketGet(BaseModel):
-    id: int = Field()
-    movie_name: str = Field()
-    seat_number: int = Field()
-    customer_name: str = Field()
-    is_vip: bool = Field()
-    price: float = Field()
-    status: str = Field()
+class TicketOut(TicketBase):
+    id: int
+    price: float

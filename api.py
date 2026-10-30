@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from schemas import TicketCreate, TicketOut, TicketGet
+from schemas import TicketCreate, TicketOut
 from database import Base, get_db, engine
 from models import Ticket
 
@@ -35,14 +35,14 @@ def create_ticket(ticket_in: TicketCreate, db: Session = Depends(get_db)):
     return ticket
 
 
-@api_router.get("/", response_model=list[TicketGet])
+@api_router.get("/", response_model=list[TicketOut])
 def get_tickets(db: Session = Depends(get_db)):
     stmt = select(Ticket)
     tickets = db.scalars(stmt).all()
     return tickets
 
 
-@api_router.get("/tickets/{seat_number}", response_model=list[TicketGet])
+@api_router.get("/tickets/{seat_number}", response_model=list[TicketOut])
 def find_seat_number(seat_number: int, db: Session = Depends(get_db)):
     stmt = select(Ticket).where(Ticket.seat_number == seat_number)
     tickets = db.scalars(stmt).all()
@@ -51,7 +51,7 @@ def find_seat_number(seat_number: int, db: Session = Depends(get_db)):
     return tickets
 
 
-@api_router.get("/tickets/{movie_name}", response_model=list[TicketGet])
+@api_router.get("/tickets/{movie_name}", response_model=list[TicketOut])
 def find_movie_name(movie_name: str, db: Session = Depends(get_db)):
     stmt = select(Ticket).where(Ticket.movie_name == movie_name)
     tickets = db.scalars(stmt).all()
