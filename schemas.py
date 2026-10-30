@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 
+
 class TicketCreate(BaseModel):
     movie_name: str = Field(max_length=200, description="The name of the movie")
     seat_number: int = Field(ge=1, le=50)

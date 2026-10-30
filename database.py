@@ -9,11 +9,12 @@ engine = create_engine(DATABASE_URL,
 
 Session = sessionmaker(bind=engine, autoflush=False)
 
+
 class Base(DeclarativeBase):
     pass
 
+
 def get_db():
-    
     try:
         db = Session()
         yield db
