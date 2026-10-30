@@ -32,7 +32,7 @@ def find_tickets_or_404(db: Session, condition, not_found_detail: str) -> list[T
 @api_router.post("/", response_model=TicketOut)
 def create_ticket(ticket_in: TicketCreate, db: Session = Depends(get_db)):
     if find_ticket(db, ticket_in.movie_name, ticket_in.seat_number):
-        raise HTTPException(status_code=404, detail="Bu bilet allaqachon sotilgan.")
+        raise HTTPException(status_code=409, detail="Bu bilet allaqachon sotilgan.")
 
     ticket = Ticket(
         **ticket_in.model_dump(),

@@ -46,7 +46,7 @@ def test_create_ticket_vip_price(client):
 def test_create_duplicate_ticket_is_rejected(client):
     client.post("/api/tickets/", json=TICKET)
     response = client.post("/api/tickets/", json=TICKET)
-    assert response.status_code == 404
+    assert response.status_code == 409
     assert response.json() == {"detail": "Bu bilet allaqachon sotilgan."}
 
 
